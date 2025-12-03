@@ -1,126 +1,110 @@
-/* Importaciones necesarias para el componente de autenticación */
 import React, { useState } from "react";
 import "./Auth.css";
 
-function Auth() {
-  /* Estados para manejar el formulario y la vista */
-  const [isLogin, setIsLogin] = useState(true); // Controla si muestra login o registro
-  const [email, setEmail] = useState(""); // Almacena el email ingresado
-  const [password, setPassword] = useState(""); // Almacena la contraseña ingresada
-  const [name, setName] = useState(""); // Almacena el nombre (solo para registro)
-  const [error, setError] = useState(""); // Maneja mensajes de error
+function Auth({ onLogin }) {
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  /* Función para alternar entre vista de login y registro */
   const toggleView = () => {
     setIsLogin(!isLogin);
-    setError(""); // Limpia errores previos
-    setEmail(""); // Limpia campos del formulario
-    setPassword("");
-    setName("");
-  };
-
-  /* Validación de correo electrónico */
-  const validateEmail = (email) => {
-    /* Verifica que el correo termine en @gmail.com o @duocuc.cl */
-    return (
-      email.endsWith("@gmail.com") || email.endsWith("@duocuc.cl")
-    );
-  };
-
-  /* Validación de contraseña */
-  const validatePassword = (password) => {
-    /* Verifica que tenga al menos una mayúscula y más de 6 caracteres */
-    return /[A-Z]/.test(password) && password.length > 6;
-  };
-
-  /* Manejador del envío del formulario */
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    /* Validación del correo electrónico */
-    if (!validateEmail(email)) {
-      setError("El correo debe ser @gmail.com o @duocuc.cl");
-      return;
-    }
-
-    /* Validación de la contraseña */
-    if (!validatePassword(password)) {
-      setError("La contraseña debe tener una mayúscula y más de 6 caracteres");
-      return;
-    }
-
-    /* Si las validaciones son exitosas */
     setError("");
-    if (isLogin) {
-      alert("Inicio de sesión exitoso ✅");
-    } else {
-      alert("Registro exitoso 🎉");
+    setEmail("");
+    setPassword("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    // URL oficial de la API
+    const url = isLogin 
+      ? "https://reqres.in/api/login" 
+      : "https://reqres.in/api/register";
+
+    const payload = { email, password };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Agregamos tu header si te funciona mejor con él
+          "x-api-key": "reqres-free-v1" 
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // 1. Guardar Token en el navegador (Persistencia)
+        localStorage.setItem("token", data.token);
+        
+        // 2. Definir Rol Real según el correo
+        // Reqres no devuelve roles, así que definimos que el correo oficial es ADMIN
+        let userRole = "USER";
+        if (email === "eve.holt@reqres.in") {
+          userRole = "ADMIN";
+        }
+
+        // Guardamos datos del usuario
+        localStorage.setItem("rol", userRole);
+        localStorage.setItem("usuario", email);
+
+        // 3. Avisar a la App que el login fue exitoso
+        onLogin(userRole); 
+      } else {
+        setError(data.error || "Credenciales incorrectas");
+      }
+
+    } catch (err) {
+      console.error(err);
+      setError("Error de conexión. Intenta nuevamente.");
     }
   };
 
   return (
-    /* Contenedor principal del formulario de autenticación */
     <div className="auth-container">
       <div className="auth-card">
-        {/* Título dinámico según la vista actual */}
-        <h2>{isLogin ? "Iniciar Sesión" : "Crear Cuenta"}</h2>
-        {/* Mensaje descriptivo según la vista */}
-        <p>
-          {isLogin
-            ? <>Accede a tu cuenta de <strong>Perfulandia</strong></>
-            : <>Únete a <strong>Perfulandia</strong> y descubre tu fragancia ideal</>}
-        </p>
+        <h2>{isLogin ? "Acceso Usuarios" : "Registro"}</h2>
+        
+        <div style={{fontSize:'0.8rem', color:'#555', marginBottom:'15px', padding:'10px', background:'#f4f4f4', borderRadius:'5px'}}>
+          <strong>Para ser ADMIN usa:</strong><br/>
+          ✉️ eve.holt@reqres.in<br/>
+          🔑 cityslicka
+        </div>
 
-        {/* Formulario de autenticación */}
         <form onSubmit={handleSubmit}>
-          {/* Campo de nombre solo visible en registro */}
-          {!isLogin && (
-            <input
-              type="text"
-              placeholder="Nombre completo"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          )}
-
-          {/* Campo de correo electrónico */}
-          <input
-            type="email"
-            placeholder="Correo electrónico"
+          <input 
+            type="email" 
+            placeholder="Correo electrónico" 
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+            onChange={(e) => setEmail(e.target.value)} 
+            required 
           />
-
-          {/* Campo de contraseña */}
-          <input
-            type="password"
-            placeholder="Contraseña"
+          <input 
+            type="password" 
+            placeholder="Contraseña" 
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+            onChange={(e) => setPassword(e.target.value)} 
+            required 
           />
-
-          {/* Mensaje de error si existe */}
-          {error && <p style={{ color: "red", fontSize: "0.9rem" }}>{error}</p>}
-
-          {/* Botón de envío */}
-          <button type="submit" className="btn">
-            {isLogin ? "Entrar" : "Registrarme"}
+          
+          {error && <div style={{ color: "red", marginTop: "10px" }}>⚠️ {error}</div>}
+          
+          <button type="submit" className="btn" style={{marginTop:'20px'}}>
+            {isLogin ? "Ingresar" : "Registrarme"}
           </button>
         </form>
-
-        {/* Enlace para cambiar entre login y registro */}
-        <a href="#" onClick={toggleView}>
-          {isLogin
-            ? <>¿No tienes cuenta? <strong>Regístrate</strong></>
-            : <>¿Ya tienes cuenta? <strong>Inicia sesión</strong></>}
+        
+        <a href="#" onClick={toggleView} style={{marginTop:'15px', display:'block'}}>
+          {isLogin ? "¿No tienes cuenta? Regístrate" : "¿Ya tienes cuenta? Inicia sesión"}
         </a>
       </div>
     </div>
   );
 }
 
-/* Exportación del componente */
 export default Auth;

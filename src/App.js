@@ -1,24 +1,78 @@
-/* Importaciones necesarias para el funcionamiento de la aplicación */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Catalogo from "./Catalogo";
 import Contacto from "./Contacto";
 import Auth from "./Auth";
+import Detalle from "./Detalle";
+import FormularioPerfume from "./FormularioPerfume";
 
 function App() {
-  /* Estado para controlar la navegación entre diferentes vistas */
   const [vista, setVista] = useState("inicio");
+  const [perfumeSeleccionado, setPerfumeSeleccionado] = useState(null);
+  
+  // --- ESTADOS AGREGADOS PARA AUTH Y CRUD ---
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [esAdmin, setEsAdmin] = useState(false);
+  const [usuario, setUsuario] = useState("");
+  const [perfumeAEditar, setPerfumeAEditar] = useState(null);
 
+  // Efecto para mantener sesión al recargar
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const rol = localStorage.getItem("rol");
+    const user = localStorage.getItem("usuario");
+
+    if (token) {
+      setIsLoggedIn(true);
+      setUsuario(user);
+      if (rol === "ADMIN") setEsAdmin(true);
+    }
+  }, []);
+
+  // Login
+  const handleLogin = (rol) => {
+    setIsLoggedIn(true);
+    setUsuario(localStorage.getItem("usuario"));
+    if (rol === "ADMIN") setEsAdmin(true);
+    setVista("catalogo");
+  };
+
+  // Logout
+  const handleLogout = () => {
+    localStorage.clear();
+    setIsLoggedIn(false);
+    setEsAdmin(false);
+    setUsuario("");
+    setVista("inicio");
+  };
+
+  // Navegación CRUD
+  const verDetalle = (id) => {
+    setPerfumeSeleccionado(id);
+    setVista("detalle");
+  };
+
+  const irACrear = () => {
+    setPerfumeAEditar(null);
+    setVista("formulario");
+  };
+
+  const irAEditar = (perfume) => {
+    setPerfumeAEditar(perfume);
+    setVista("formulario");
+  };
+
+  const volverAlCatalogo = () => {
+    setVista("catalogo");
+  };
+  
   return (
     <div className="App">
-      {/* NAVBAR - Barra de navegación principal */}
+      {/* NAVBAR */}
       <nav className="navbar">
         <div className="nav-container">
-          {/* Logo de la tienda */}
-          <h1 className="logo">Perfulandia</h1>
-          {/* Lista de enlaces de navegación */}
+          <h1 className="logo" onClick={() => setVista("inicio")}>Perfulandia</h1>
           <ul className="nav-links">
-            {/* Cada botón cambia el estado 'vista' y tiene una clase active cuando está seleccionado */}
             <li>
               <button
                 onClick={() => setVista("inicio")}
@@ -27,67 +81,134 @@ function App() {
                 Inicio
               </button>
             </li>
-            {/* ... resto de botones de navegación ... */}
+            <li>
+              <button
+                onClick={() => setVista("catalogo")}
+                className={vista === "catalogo" ? "active" : ""}
+              >
+                Catálogo
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => setVista("contacto")}
+                className={vista === "contacto" ? "active" : ""}
+              >
+                Contacto
+              </button>
+            </li>
+            
+            {/* Lógica de Login/Logout en el botón */}
+            {!isLoggedIn ? (
+              <li>
+                <button
+                  onClick={() => setVista("auth")}
+                  className={vista === "auth" ? "active" : ""}
+                >
+                  Login / Registro
+                </button>
+              </li>
+            ) : (
+              <li style={{display:'flex', alignItems:'center', gap:'10px'}}>
+                <span style={{fontSize:'0.9rem', color:'#333'}}>Hola, {usuario}</span>
+                <button 
+                  onClick={handleLogout} 
+                  style={{color: 'red', background:'transparent', border:'none', cursor:'pointer', fontWeight:'bold'}}
+                >
+                  Salir
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </nav>
 
-      {/* Sección de inicio - Solo se muestra cuando vista === "inicio" */}
+      {/* HOME (Tu contenido original del inicio) */}
       {vista === "inicio" && (
         <>
-          {/* Hero Section - Sección principal con mensaje de bienvenida */}
           <section className="hero">
             <div className="hero-text">
               <h2>Bienvenido a Perfulandia</h2>
               <p>El aroma que define tu estilo</p>
-              {/* Botón CTA que redirige al catálogo */}
               <button className="btn-comprar" onClick={() => setVista("catalogo")}>
                 Ver Catálogo
               </button>
             </div>
           </section>
 
-          {/* Features Section - Muestra las características principales del negocio */}
-          <section className="features">
+           <section className="features">
             <h2>¿Por qué elegirnos?</h2>
-            {/* Grid de características con 3 tarjetas */}
             <div className="features-grid">
-              {/* Cada feature-card representa una característica del negocio */}
               <div className="feature-card">
-                {/* Iconos e información de características */}
                 <img src="/img/icono1.png" alt="Fragancias Exclusivas" className="feature-icon" />
                 <h3>Fragancias Exclusivas</h3>
                 <p>Perfumes únicos y originales de las mejores marcas.</p>
               </div>
-              {/* ... otras feature-cards ... */}
+              <div className="feature-card">
+                <img src="/img/icono2.png" alt="Envíos a Todo Chile" className="feature-icon" />
+                <h3>Envíos a Todo Chile</h3>
+                <p>Tu fragancia favorita directo a tu puerta.</p>
+              </div>
+              <div className="feature-card">
+                <img src="/img/icono3.png" alt="Precios Accesibles" className="feature-icon" />
+                <h3>Precios Accesibles</h3>
+                <p>Perfumes de calidad a precios que amarás.</p>
+              </div>
             </div>
           </section>
 
-          {/* About Section - Información sobre el fundador y la empresa */}
           <section className="about">
             <div className="about-container">
-              {/* Contenedor de imagen del fundador */}
               <div className="about-image">
                 <img src="/alonso.jpg" alt="Fundador Alonso Rivadeneira" />
               </div>
-              {/* Texto biográfico y descripción de la empresa */}
               <div className="about-text">
-                <p class="lead">
-                  Hola, soy <strong>Alonso Rivadeneira</strong>, un joven emprendedor apasionado por el mundo de los aromas. 
+                <p className="lead">
+                Hola, soy <strong>Alonso Rivadeneira</strong>, un joven emprendedor apasionado por el mundo de los aromas. 
                 </p>
-                {/* ... resto del texto ... */}
+                <p>
+                Comencé este proyecto con la idea de acercar a todos perfumes de calidad a precios accesibles. 
+                 Así nació <strong>Perfulandia</strong>, una tienda creada con dedicación, donde cada fragancia está pensada para acompañarte en tus momentos más importantes.
+                </p>
               </div>
             </div>
           </section>
         </>
       )}
 
-      {/* Renderizado condicional de componentes según la vista seleccionada */}
-      {vista === "catalogo" && <Catalogo />}
-      {vista === "contacto" && <Contacto />}
-      {vista === "auth" && <Auth />}
+      {/* VISTA CATÁLOGO CON LOGICA ADMIN */}
+      {vista === "catalogo" && (
+        <Catalogo 
+          alSeleccionar={verDetalle} 
+          esAdmin={esAdmin} 
+          alCrear={irACrear}
+          alEditar={irAEditar}
+        />
+      )}
 
-      {/* Footer - Pie de página con información básica */}
+      {/* VISTA FORMULARIO (Crear/Editar) */}
+      {vista === "formulario" && (
+        <FormularioPerfume 
+          perfumeAEditar={perfumeAEditar} 
+          alGuardar={volverAlCatalogo}
+          alCancelar={volverAlCatalogo}
+        />
+      )}
+
+      {vista === "contacto" && <Contacto />}
+      
+      {/* VISTA AUTH CON CALLBACK */}
+      {vista === "auth" && <Auth onLogin={handleLogin} />}
+
+      {/* VISTA DETALLE */}
+      {vista === "detalle" && (
+        <Detalle 
+          idPerfume={perfumeSeleccionado} 
+          alVolver={() => setVista("catalogo")} 
+        />
+      )}
+
+      {/* FOOTER */}
       <footer className="footer">
         <p>Perfulandia - 2025</p>
       </footer>
@@ -95,5 +216,4 @@ function App() {
   );
 }
 
-/* Exportación del componente para su uso en otras partes de la aplicación */
 export default App;
