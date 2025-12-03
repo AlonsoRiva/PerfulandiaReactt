@@ -1,26 +1,61 @@
-# Perfulandia - Proyecto React (SPA) 🛍️
 
-Este proyecto es una tienda de perfumes ficticia llamada "Perfulandia", desarrollada como parte de la Evaluación Parcial 2 para la asignatura DSY1104 (Desarrollo Fullstack II) de Duoc UC.
+## 💻 `README.md` para el Frontend (PerfulandiaReactt)
 
-El proyecto original, que estaba construido con HTML, CSS y JavaScript estático, fue migrado exitosamente a una **Single Page Application (SPA)** utilizando la biblioteca **React**.
+# 🛍️ Perfulandia - Proyecto React (SPA)
+
+Este proyecto es una tienda de perfumes ficticia llamada "Perfulandia", desarrollada como parte de la **Evaluación Parcial 3** para la asignatura **DSY1104 (Desarrollo Fullstack II)** de Duoc UC.
+
+El proyecto original fue migrado exitosamente a una **Single Page Application (SPA)** utilizando la biblioteca **React**, implementando una capa de interfaz de usuario para interactuar con la **API REST** de un backend en Spring Boot.
 
 ## ✨ Características Principales
 
-La aplicación utiliza componentes de React y el hook `useState` para gestionar el estado de la navegación y los formularios.
+La arquitectura se centra en la gestión dinámica del estado y la interacción con el backend para ofrecer una experiencia de usuario fluida y con control de acceso:
 
-* **Navegación SPA:** Se puede navegar entre las vistas "Inicio", "Catálogo", "Contacto" y "Login" sin necesidad de recargar la página. La vista se controla mediante un estado en el componente `App.js`.
-* **Componente de Catálogo:** El catálogo de perfumes (`Catalogo.js`) se renderiza dinámicamente iterando sobre un arreglo local de productos.
-* **Componente de Autenticación:** Un componente unificado (`Auth.js`) maneja tanto el **Inicio de Sesión** como el **Registro**.
-* **Validaciones (Frontend):** El formulario de autenticación incluye lógica de validación en el lado del cliente:
-    * El correo debe ser `@gmail.com` o `@duocuc.cl`.
-    * La contraseña debe tener más de 6 caracteres y al menos una mayúscula.
+  * **Navegación SPA:** La navegación entre las vistas "Inicio", "Catálogo", "Contacto" y "Login" se gestiona completamente con el *hook* `useState` en el componente principal `App.js`, evitando recargas de página.
+  * **Autenticación y Autorización (Simulada):**
+      * El componente `Auth.js` simula el proceso de Login/Registro utilizando una API externa (`reqres.in`) para la validación de credenciales.
+      * Utiliza `localStorage` para persistir el estado de la sesión (`token`, `rol`, `usuario`) entre recargas.
+      * Implementa lógica de **Autorización** mostrando funciones administrativas (CRUD) solo si el usuario tiene el rol `ADMIN`.
+  * **Gestión de Catálogo (CRUD Fullstack):**
+      * El componente `Catalogo.js` lista los perfumes obtenidos del API backend.
+      * Implementa los métodos **C**rear, **R**eer, **U**pdate y **D**elete de perfumes, delegando las peticiones a `fetch` y al API en Spring Boot.
+
+-----
+
+## 🛠️ Stack y Arquitectura
+
+| Componente | Descripción | Detalles Técnicos |
+| :--- | :--- | :--- |
+| **Backend API** | PerfulandiaBackend (Spring Boot) | Esperado en `http://localhost:8080/api/perfumes`. |
+| **Peticiones** | Comunicación con el API | Se utiliza la API nativa **`fetch`** con métodos `GET`, `POST`, `PUT`, `DELETE`. |
+| **Estado Global** | `App.js` | Utiliza múltiples `useState` para gestionar la vista actual, el estado de `isLoggedIn`, y el rol `esAdmin`. |
+| **Formularios** | `FormularioPerfume.js` | Implementa **formularios controlados** donde cada *input* está directamente enlazado al estado del componente a través de `value` y `onChange`. |
+| **Estilos** | CSS Puro | Estilos modulares definidos en `App.css` y `Auth.css`. |
+
+### Rutas Clave (Controladas por el Estado `vista`)
+
+| Ruta Lógica | Componente | Descripción |
+| :--- | :--- | :--- |
+| `inicio` | JSX en `App.js` | Pantalla de bienvenida con promoción y sección "About" (autor). |
+| `catalogo` | `Catalogo.js` | Muestra la lista de perfumes con lógica condicional para botones de edición/eliminación (solo Admin). |
+| `detalle` | `Detalle.js` | Muestra información completa de un perfume, realizando un `GET /api/perfumes/{id}`. |
+| `formulario` | `FormularioPerfume.js` | Formulario unificado para la creación (`POST`) y edición (`PUT`) de perfumes. |
+| `auth` | `Auth.js` | Pantalla de autenticación para Login/Registro. |
+
+-----
 
 ## 🚀 Cómo ejecutar el proyecto
 
-Para levantar el servidor de desarrollo local:
+Para interactuar con el CRUD, es fundamental que el backend esté activo.
+
+### 1\. Iniciar el Backend
+
+Asegúrate de que el proyecto **PerfulandiaBackend** esté corriendo en `http://localhost:8080` (usando `mvn spring-boot:run`).
+
+### 2\. Iniciar el Frontend
 
 1.  Clonar este repositorio.
-2.  Instalar las dependencias del proyecto:
+2.  Instalar las dependencias:
     ```bash
     npm install
     ```
@@ -28,16 +63,21 @@ Para levantar el servidor de desarrollo local:
     ```bash
     npm start
     ```
-    (O `npm run dev` si se usa Vite).
+    La aplicación se abrirá en tu navegador, probablemente en `http://localhost:3000` o `http://localhost:5173`.
 
-## 🛠️ Stack de Tecnologías
+### 🔑 Credenciales de Prueba (Auth.js)
 
-* **React:** Biblioteca principal para la construcción de la interfaz de usuario.
-* **React Hooks:** (`useState`) para la gestión de estados locales (navegación y formularios).
-* **CSS:** Estilos personalizados (`App.css`) para todos los componentes.
+Para acceder a la vista de administrador y probar el CRUD completo (Crear, Editar, Eliminar):
+
+| Rol | Correo | Contraseña (Mock) |
+| :--- | :--- | :--- |
+| **ADMIN** (Activa CRUD) | `eve.holt@reqres.in` | `cityslicka` |
+| **USER** (Solo Lectura) | Cualquier otro correo de `reqres.in` | (Cualquier contraseña) |
+
+-----
 
 ## 👨‍💻 Autor
 
-* **Alonso Rivadeneira Barrales**
-* **Asignatura:** DSY1104 - Desarrollo Fullstack II
-* **Institución:** Duoc UC
+  * **Alonso Rivadeneira Barrales**
+  * **Asignatura:** DSY1104 - Desarrollo Fullstack II
+  * **Institución:** Duoc UC
