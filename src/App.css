@@ -320,3 +320,278 @@ body {
   padding: 20px 0;
   margin-top: 40px;
 }
+
+
+
+/* ---------- VISTA DETALLE ---------- */
+.detalle-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  animation: fadeIn 0.5s;
+}
+
+.detalle-card {
+  display: flex;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  overflow: hidden;
+  gap: 40px;
+  padding: 40px;
+}
+
+.detalle-imagen {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.detalle-imagen img {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.detalle-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.detalle-nombre {
+  font-size: 2.5rem;
+  color: #1d1fff;
+  margin-bottom: 5px;
+}
+
+.detalle-marca {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.detalle-precios {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.precio-actual {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.precio-antes {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 1.2rem;
+}
+
+.notas-olfativas {
+  font-style: italic;
+  color: #555;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-left: 4px solid #1d1fff;
+  margin: 10px 0 20px 0;
+}
+
+.btn-volver {
+  background: none;
+  border: none;
+  color: #1d1fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.btn-volver:hover {
+  text-decoration: underline;
+}
+
+.btn-comprar-grande {
+  padding: 15px;
+  background-color: #1d1fff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 20px;
+}
+
+.btn-comprar-grande:hover {
+  background-color: #0000cd;
+  transform: translateY(-2px);
+}
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+  .detalle-card {
+    flex-direction: column;
+    padding: 20px;
+  }
+}
+
+/* Cabecera del catálogo con botón crear */
+.catalogo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
+}
+
+.catalogo-header h2 {
+  margin: 0;
+}
+
+.admin-badge {
+  color: #dc3545;
+  font-size: 0.5em;
+  margin-left: 10px;
+}
+
+/* Botón verde para crear */
+.btn-crear {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-crear:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* Contenedor de botones editar/eliminar en la tarjeta */
+.admin-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  width: 100%;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+/* Estilo base para botones de admin */
+.btn-admin {
+  flex: 1;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.btn-editar {
+  background-color: #ffc107;
+  color: #333;
+}
+.btn-editar:hover { background-color: #e0a800; }
+
+.btn-eliminar {
+  background-color: #dc3545;
+  color: white;
+}
+.btn-eliminar:hover { background-color: #c82333; }
+
+/* --- FORMULARIO DE PERFUMES (Crear/Editar) --- */
+.formulario-section {
+  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 80vh;
+}
+
+.formulario-card {
+  background-color: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 600px;
+}
+
+.formulario-card h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #1d1fff;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  border-color: #1d1fff;
+  box-shadow: 0 0 0 3px rgba(29, 31, 255, 0.1);
+}
+
+.form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-guardar {
+  flex: 1;
+  background-color: #1d1fff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+.btn-guardar:hover { background-color: #0000cd; }
+
+.btn-cancelar {
+  flex: 1;
+  background-color: #6c757d;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+.btn-cancelar:hover { background-color: #5a6268; }
