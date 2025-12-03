@@ -1,6 +1,3 @@
-
-## 💻 `README.md` para el Frontend (PerfulandiaReactt)
-
 # 🛍️ Perfulandia - Proyecto React (SPA)
 
 Este proyecto es una tienda de perfumes ficticia llamada "Perfulandia", desarrollada como parte de la **Evaluación Parcial 3** para la asignatura **DSY1104 (Desarrollo Fullstack II)** de Duoc UC.
