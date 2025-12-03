@@ -31,7 +31,7 @@ function Auth({ onLogin }) {
         headers: {
           "Content-Type": "application/json",
           // Agregamos tu header si te funciona mejor con él
-          "x-api-key": "reqres-free-v1" 
+          "x-api-key": "reqres_1aad58804860460da65851f23f273333" 
         },
         body: JSON.stringify(payload),
       });
@@ -70,10 +70,12 @@ function Auth({ onLogin }) {
       <div className="auth-card">
         <h2>{isLogin ? "Acceso Usuarios" : "Registro"}</h2>
         
-        <div style={{fontSize:'0.8rem', color:'#555', marginBottom:'15px', padding:'10px', background:'#f4f4f4', borderRadius:'5px'}}>
-          <strong>Para ser ADMIN usa:</strong><br/>
-          ✉️ eve.holt@reqres.in<br/>
-          🔑 cityslicka
+        <div style={{fontSize:'0.8rem', color:'#555', marginBottom:'15px', padding:'10px', background:'#f4f4f4', borderRadius:'5px', textAlign: 'left'}}>
+          <p style={{margin: '0 0 5px 0'}}><strong>👑 ADMIN:</strong></p>
+          <p style={{margin: '0 0 10px 0'}}>✉️ eve.holt@reqres.in<br/>🔑 cityslicka</p>
+          
+          <p style={{margin: '0 0 5px 0', borderTop: '1px solid #ccc', paddingTop: '5px'}}><strong>👤 USER (Normal):</strong></p>
+          <p style={{margin: 0}}>✉️ lindsay.ferguson@reqres.in<br/></p>
         </div>
 
         <form onSubmit={handleSubmit}>
