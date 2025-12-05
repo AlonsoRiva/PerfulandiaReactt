@@ -29,7 +29,7 @@ body {
   font-weight: 700;
   color: #1d1fff; /* azul moderno */
   cursor: pointer;
-  margin-left: -350px; /* Ajusta según sea necesario */
+  margin-left: 0px; /* Ajusta según sea necesario */
 }
 
 .nav-links {
@@ -690,3 +690,4 @@ body {
     transform: translateY(0);
   }
 }
+
