@@ -209,9 +209,48 @@ function App() {
       )}
 
       {/* FOOTER */}
-      <footer className="footer">
-        <p>Perfulandia - 2025</p>
-      </footer>
+ <footer className="footer">
+  <div className="footer-content" style={{maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px', textAlign: 'left', paddingBottom: '20px'}}>
+    
+    <div style={{flex: 1, minWidth: '250px'}}>
+      <h3 style={{color: 'var(--accent-gold)', marginBottom: '15px'}}>Perfulandia</h3>
+      <p style={{fontSize: '0.9rem', color: '#ccc'}}>La mejor selección de fragancias exclusivas para resaltar tu personalidad.</p>
+    </div>
+
+    <div style={{flex: 1, minWidth: '250px'}}>
+      <h4 style={{color: 'white', marginBottom: '15px', fontFamily: 'Montserrat'}}>Enlaces Rápidos</h4>
+      <ul style={{listStyle: 'none', padding: 0}}>
+        <li style={{marginBottom: '8px'}}><a href="#" onClick={() => setVista("inicio")} style={{color: '#ccc', textDecoration: 'none'}}>Inicio</a></li>
+        <li style={{marginBottom: '8px'}}><a href="#" onClick={() => setVista("catalogo")} style={{color: '#ccc', textDecoration: 'none'}}>Catálogo</a></li>
+        <li><a href="#" onClick={() => setVista("contacto")} style={{color: '#ccc', textDecoration: 'none'}}>Contacto</a></li>
+      </ul>
+    </div>
+
+    <div style={{flex: 1, minWidth: '250px'}}>
+      <h4 style={{color: 'white', marginBottom: '15px', fontFamily: 'Montserrat'}}>Síguenos</h4>
+      <div style={{display: 'flex', gap: '15px'}}>
+        {/* Usamos emojis o podrías usar iconos reales */}
+        <span style={{fontSize: '1.5rem', cursor: 'pointer'}}>📷</span>
+        <span style={{fontSize: '1.5rem', cursor: 'pointer'}}>📘</span>
+        <span style={{fontSize: '1.5rem', cursor: 'pointer'}}>🐦</span>
+      </div>
+    </div>
+  </div>
+  
+  <div style={{borderTop: '1px solid #444', paddingTop: '20px', marginTop: '20px', fontSize: '0.8rem', color: '#888'}}>
+    &copy; 2025 Perfulandia. Todos los derechos reservados.
+  </div>
+</footer>
+
+  <a 
+    href="https://wa.me/56931483180" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="whatsapp-float"
+  >
+    💬
+  </a>
+
     </div>
   );
 }
